@@ -1,0 +1,212 @@
+{
+    "namespace": "com.ing.gep.itproduct",
+    "doc": "GEP IT Product description",
+    "name": "GlobalEngineeringPlatformItProduct",
+    "type": "record",
+    "fields": [
+        {
+            "name": "schemaVersion",
+            "type": "long",
+            "default": 1,
+            "doc": "GEP IT Product AVRO schema version"
+        },
+        {
+            "name": "itProductClass",
+            "type": {
+                "name": "itProductType",
+                "type": "enum",
+                "symbols": [
+                    "APPLICATION",
+                    "PLATFORM",
+                    "TECHPRODUCT"
+                ]
+            },
+            "doc": "type of IT Product"
+        },
+        {
+            "name": "itProductSubType",
+            "type": "string",
+            "doc": "the sub-type of the IT Product"
+        },
+        {
+            "name": "lastUpdateTimestamp",
+            "type": "long",
+            "doc": "timestamp in ms, UTC time"
+        },
+        {
+            "name": "name",
+            "type": "string",
+            "doc": "IT Product long name"
+        },
+        {
+            "name": "acronym",
+            "type": "string",
+            "doc": "IT Product short name as an 3-4 letters acronym"
+        },
+        {
+            "name": "code",
+            "type": "string",
+            "doc": "the ACE IT Product (f.k.a. purpose) code"
+        },
+        {
+            "name": "uuid",
+            "type": "string",
+            "doc": "unique technical ID of the IT Product"
+        },
+        {
+            "name": "aliases",
+            "type": {
+                "name": "alias",
+                "type": "array",
+                "items": "string"
+            },
+            "doc": "an array of legacy aliases IT Product ID's"
+        },
+        {
+            "name": "parentItProductCode",
+            "type": "string",
+            "doc": "Parent IT Product Code reference"
+        },
+        {
+            "name": "designDependencies",
+            "type": {
+                "name": "designDependency",
+                "type": "record",
+                "namespace": "com.ing.gep.itproduct",
+                "fields": [
+                    {
+                        "name": "dependencyName",
+                        "type": "string",
+                        "doc": "name of the dependency"
+                    },
+                    {
+                        "name": "uuid",
+                        "type": "string",
+                        "doc": "unique identifier of the dependency"
+                    },
+                    {
+                        "name": "sourceItProductCode",
+                        "type": "string",
+                        "doc": "IT Product Code of the source - actually this IT PRODUCT"
+                    },
+                    {
+                        "name": "destinationIProductCode",
+                        "type": "string",
+                        "doc": "IT Product code of the destinationIProductCode"
+                    },
+                    {
+                        "name": "dependencyAttributes",
+                        "type": {
+                            "type": "maps",
+                            "values": "string",
+                            "default": null
+                        }
+                    }
+                ]
+            },
+            "doc": "collection of dependencies records to IT Product"
+        },
+        {
+            "name": "tribe",
+            "type": "com.ing.gep.team",
+            "doc": "The Tribe owning the IT Product as a reference to a ACE Team object"
+        },
+        {
+            "name": "team",
+            "type": "com.ing.gep.team",
+            "doc": "the Team owning the IT Product as a reference to a ACE Team object"
+        },
+        {
+            "name": "assetOwner",
+            "type": "com.ing.gep.employee",
+            "doc": "the employee who is the asset owner of the IT Product"
+        },
+        {
+            "name": "itCustodian",
+            "type": "com.ing.gep.employee",
+            "doc": "the employee who is the IT Custodian of the IT Product"
+        },
+        {
+            "name": "architect",
+            "type": "com.ing.gep.employee",
+            "doc": "the employee who is the architect of the IT Product"
+        },
+        {
+            "name": "productOwner",
+            "type": "com.ing.gep.employee",
+            "doc": "the employee who is the productOwner of the IT Product - inherited from the Team field"
+        },
+        {
+            "name": "contactPerson",
+            "type": "com.ing.gep.employee",
+            "doc": "the employee who is the main contact for the IT Product - is a member of the ACE Team owning the IT Product"
+        },
+        {
+            "name": "teamCostCenter",
+            "type": "string",
+            "doc": "the cost center associated to the ACE Team owning the IT Product - inherited from the team field"
+        },
+        {
+            "name": "architectureCapabilities",
+            "type": [
+                "com.ing.architecture.framework.capability"
+            ],
+            "doc": "a collection of architecture capabilities the IT Product maps"
+        },
+        {
+            "name": "developmentType",
+            "type": [
+                "COTS",
+                "IN-HOUSE"
+            ],
+            "doc": "the main type of development of the IT Product"
+        },
+        {
+            "name": "runTimeTarget",
+            "type": {
+                "name": "runTimeTarget",
+                "type": "enum",
+                "symbols": [
+                    "ING_ON-PREMISE",
+                    "IPC",
+                    "MS_AZURE",
+                    "GOOGLE_CLOUD",
+                    "AWS",
+                    "SAAS"
+                ]
+            },
+            "doc": "the type of run time target"
+        },
+        {
+            "name": "itProductScope",
+            "type": {
+                "name": "itProductScope",
+                "type": "enum",
+                "symbols": [
+                    "GLOBAL",
+                    "SHARED",
+                    "LOCAL"
+                ]
+            },
+            "doc": "the scope of the IT PRODUCT"
+        },
+        {
+            "name": "architectureStatus",
+            "type": {
+                "name": "architectureStatus",
+                "type": "enum",
+                "symbols": [
+                    "PROPOSED",
+                    "DEFINED",
+                    "IN_IMPLEMENTATION",
+                    "OPERATIONAL",
+                    "CONTAINED",
+                    "MAINTAINED_(TARGET)",
+                    "DECOMMISSIONED",
+                    "DISPOSED"
+                ]
+            },
+            "doc": "the architecture status of the IT Product"
+        }
+    ]
+}

@@ -1,0 +1,1 @@
+"C:\Users\XY56RE\Programs\python37\scripts\cmd.bat" "cd %~dp0 && pyinstaller -F y2j.spec && copy /y dist\y2j.exe C:\Users\XY56RE\Programs""
