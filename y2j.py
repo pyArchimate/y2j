@@ -1,5 +1,5 @@
 from oyaml import load, dump
-import re
+
 
 try:
     from oyaml import CLoader as Loader, CDumper as Dumper
