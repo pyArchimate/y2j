@@ -1,6 +1,5 @@
 from oyaml import load, dump
 
-
 try:
     from oyaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
@@ -40,7 +39,7 @@ def convert(_file, _outputfile, _json):
                 i = 1
                 for line in lines:
                     data = json.loads(line)
-                    obj = {f"line{i}": data}
+                    obj = {f'@line{i}': data}
                     i += 1
                     if _outputfile:
                         with open(_outputfile, "a") as o:
@@ -48,6 +47,8 @@ def convert(_file, _outputfile, _json):
                             o.write("\n")
                     else:
                         print(dump(obj, Dumper=Dumper, default_flow_style=False))
+                with open(_outputfile, "a") as o:
+                    o.write('@end')
             else:
                 data = json.load(f)
                 if _outputfile:
@@ -63,14 +64,24 @@ def convert(_file, _outputfile, _json):
             if 'name:' in body and 'type: record' in body and 'fields' in body:
                 _outputfile = _outputfile.split('.')[0] + '.avsc'
 
-            data = load(body, Loader=Loader)
-            if _outputfile:
-                with open(_outputfile, "w") as o:
-                    s = json.dumps(data, indent=4)
-                    s = beautify_avro(s)
-                    o.write(s)
-            else:
-                print(json.dumps(data, indent=4))
+            # detect meta @line for generating jsonl instead of json
+            if '@line' in body and '@end' in body:
+                pat = r'\@line.*\n(.*)\@end'
+                for m in re.finditer(pat, body):
+                    data = m.group(1)
+                    if _outputfile:
+                        json.dump(data, open(_outputfile, "a") )
+                    else:
+                        print(json.dumps(data, indent=4))
+                else:
+                    data = load(body, Loader=Loader)
+                    if _outputfile:
+                        with open(_outputfile, "w") as o:
+                            s = json.dumps(data, indent=4)
+                            s = beautify_avro(s)
+                            o.write(s)
+                    else:
+                        print(json.dumps(data, indent=4))
 
 
 def escapeRegExp(s):
