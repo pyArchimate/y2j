@@ -9,9 +9,13 @@ import json
 import sys
 import argparse
 import os
-from os import listdir, getcwd
+from os import listdir, getcwd, getenv
 from os.path import isfile, join, isdir
+from ConfigObject import ConfigObject
 import re
+
+
+CONFIG_FILE = join(getenv('USERPROFILE'), '.y2j', r'y2j.conf')
 
 
 def beautify_avro(_s):
@@ -267,6 +271,8 @@ def main():
                         help="specify output file")
     parser.add_argument("-d", "--directory", required=False,
                         help="convert all files from ")
+    parser.add_argument("-m", "--mergeHeader", required=False, action='store_true',
+                        help="merge header with body")
     parser.add_argument('file', nargs='?',
                         help="convert the specified file")
     args = parser.parse_args()
@@ -305,6 +311,28 @@ def main():
                 data = avro_uml(args.file)
                 with open(join(args.file.split('.')[0] + '.puml'), 'w') as f:
                     f.write(data)
+            if ext == 'avsc' and args.mergeHeader and 'Topic' not in args.file:
+                try:
+                    config = ConfigObject(filename=CONFIG_FILE)
+                    header_file = config['header']['path']
+                    body = json.load(open(args.file, 'r'))
+                    header = json.load(open(header_file, 'r'))
+                    topic_schema = {'header': header, 'body': body}
+                    topic_str = beautify_avro(json.dumps(topic_schema, indent=4))
+                    file_name = args.file.split('.')[0]
+                    file_name = file_name.split('Body')[0]
+                    file_name += 'Topic.avsc'
+                    with open(file_name, 'w') as fd:
+                        fd.write(topic_str)
+                    sys.exit(0)
+                except IOError:
+                    print('Config or header file not found')
+                    sys.exit(-1)
+                except KeyError:
+                    print('Config key error')
+                    sys.exit(-1)
+
+
 
         else:
             if not args.outputFile:

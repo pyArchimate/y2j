@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['y2j.py'],
-             pathex=['/root/PycharmProjects/y2j'],
+             pathex=['C:\\Users\\NC05UV\\PycharmProjects\\y2j'],
              binaries=[],
              datas=[],
              hiddenimports=[],
