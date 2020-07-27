@@ -312,6 +312,7 @@ def main():
                     args.outputFile = join(args.file.split('.')[0] + '.avsc')
                 else:
                     args.outputFile = join(args.file.split('.')[0] + '.json')
+
         convert(args.file, args.outputFile, args.json)
 
     elif args.directory:
