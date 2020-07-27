@@ -1,0 +1,56 @@
+{
+    "name": "GEPCmCiItServiceEvent",
+    "namespace": "com.ing.gep.cms",
+    "type": "record",
+    "doc": "IT Service schema for a derived event body from \\#CM CI derivation",
+    "fields": [
+        {
+            "name": "header",
+            "type": {
+                "namespace": "com.ing.gep.eventheader",
+                "name": "GlobalEngineeringPlatformEventHeader",
+                "type": "record",
+                "doc": "* GEP Fact Event description\n* Meta data of a fact is about <who> <did> <what> <when>\n* This header must be included in every event sent for the purpose\n* of IT Risk Automation & Configuration Management Automation\n*\n* In your event AVRO schema, please insert the following lines in the fields section\n*\n*\n*        \"doc\" \"Event mandatory meta data\",\n*        \"name\" \"GEPMandatoryHeader\",\n*        \"type\" \"com.ing.gep.eventheader\"\n*\n",
+                "fields": [
+                    {"name": "schemaVersion", "type": "string", "default": "1.0.1", "doc": "GEP Operation Event AVRO schema version"},
+                    {"name": "timestamp", "type": "long", "doc": "information about the <when> - timestamp in millis,  UTC time (epoch),  of when the reported fact has actually occurred(not the event timestamp)"},
+                    {"name": "message", "type": ["string", "null"], "default": "null", "doc": "Human readable free text message associated to the event- not used for data parsing"},
+                    {"name": "eventProducerItProductId", "type": "string", "doc": "context about the <who> We need to know which instance of an IT Product runtime service triggered the event It is the combination of - the IT Product code (this attribute) - and an environment id ([DTAP] or CDaaS Environment id) (environmentId attribute) The 'eventProducerItProductId' is the IT Product (ACE Purpose) code unique identifier to which belongs the system sending the Event Temporarily,  if the ACE Purpose is unknownn,  please use the Unique ING Identifier of the related Business Application inServiceNow DevOps CMDB"},
+                    {"name": "environmentId", "type": "string", "doc": "environment id is either one of the \"DTAP\" character or a AzureDevOps CDaaS Environment id"},
+                    {"name": "host", "type": ["string", "null"], "doc": "the fully qualified domain name FQDN by preference,  or ip address,  of the host sending the event"},
+                    {"name": "userIdentity", "type": ["string", "null"], "doc": "identity of the user or the system account that triggered the event"},
+                    {"name": "operation", "type": "string", "doc": "Information about the performed action,  a(past-tense verb) performed by a user or a system"},
+                    {"name": "traceId", "type": ["string", "null"], "doc": "identifier used to correlate multiple events of a same context"},
+                    {"name": "impactedITProduct", "type": "string", "doc": "information about the on <what> which IT Product,  which related resource - ACE P-Code of the IT Product impacted by the operation - ServiceNow CMDB ING Unique Identifier could also be given if no IT Product code exists yet"},
+                    {"name": "impactedITResource", "type": ["string", "null"], "doc": "the ID of the IT Resource impacted by the operation (the <what>) - or by default its name."}
+                ]
+            }
+        },
+        {
+            "name": "body",
+            "type": {
+                "type": "record",
+                "name": "body",
+                "fields": [
+                    {"name": "schemaVersion", "type": "string", "doc": "version of the AVRO schema"},
+                    {"name": "label", "type": "string", "default": "IT SERVICE", "doc": "label is a constant here"},
+                    {"name": "type", "type": "string", "default": "entity", "doc": "constant value"},
+                    {
+                        "name": "attributes",
+                        "type": {
+                            "type": "record",
+                            "name": "attributes",
+                            "fields": [
+                                {"name": "uuid", "type": ["null", "string"], "doc": "unique IT Service identifier"},
+                                {"name": "name", "type": ["null", "string"], "doc": "IT Service Name"},
+                                {"name": "itProductCode", "type": ["null", "string"]},
+                                {"name": "environment", "type": ["null", "string"]},
+                                {"name": "lastUpdate", "type": ["null", "string"]}
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
