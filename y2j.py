@@ -16,7 +16,7 @@ import re
 
 
 CONFIG_FILE = join(getenv('USERPROFILE'), '.y2j', r'y2j.conf')
-
+VERSION = "1.2.0"
 
 def beautify_avro(_s):
     pat = r'{[^{]*?}'
@@ -273,9 +273,15 @@ def main():
                         help="convert all files from ")
     parser.add_argument("-m", "--mergeHeader", required=False, action='store_true',
                         help="merge header with body")
+    parser.add_argument("-v", "--version", required=False, action='store_true',
+                        help="display the version of this tool")
     parser.add_argument('file', nargs='?',
                         help="convert the specified file")
     args = parser.parse_args()
+
+    if args.version:
+        print(f'y2j version V{VERSION}')
+        sys.exit(0)
 
     if args.file is None and args.directory is None:
         print("Missing input file or directory")
