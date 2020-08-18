@@ -18,12 +18,13 @@ import re
 CONFIG_FILE = join(getenv('USERPROFILE'), '.y2j', r'y2j.conf')
 VERSION = "1.2.0"
 
+
 def beautify_avro(_s):
     pat = r'{[^{]*?}'
     for m in re.finditer(pat, _s):
         _x = m.group(0)
         _x = _x.replace("\n", "").replace("  ", "").replace(",", ", ").replace("\t", "")
-        _s = re.sub(escapeRegExp(m[0]), _x, _s)
+        _s = re.sub(escape_reg_exp(m[0]), _x, _s)
     return _s
 
 
@@ -75,7 +76,6 @@ def convert(_file, _outputfile, _json):
                     os.remove(_outputfile)
                 pat = r"@line.*?\n(.*?)\n'"
                 for m in re.finditer(pat, body, re.DOTALL):
-                    x = m[0]
                     if m[1]:
                         data = load(m[1], Loader=Loader)
                         if _outputfile:
@@ -95,7 +95,7 @@ def convert(_file, _outputfile, _json):
                     print(json.dumps(data, indent=4))
 
 
-def escapeRegExp(s):
+def escape_reg_exp(s):
     """
     This function escapes special characters in the str argument used in regular expressions
     and returns the modified string
@@ -243,7 +243,7 @@ def avro_uml(file):
                 ifile = os.path.join(fpath, m[1])
                 with open(ifile, 'r') as f:
                     idata = f.read()
-                data = re.sub(escapeRegExp(m[0]), "' Include " + m[1] + '\n' + idata, data)
+                data = re.sub(escape_reg_exp(m[0]), "' Include " + m[1] + '\n' + idata, data)
             # remove any directive from file
             data = re.sub(r'@.*', '', data)
             data = re.sub(r'skinparam.*', '', data)
@@ -280,7 +280,7 @@ def main():
     args = parser.parse_args()
 
     if args.version:
-        print(f'y2j version V{VERSION}')
+        print(f'y2j version v{VERSION}')
         sys.exit(0)
 
     if args.file is None and args.directory is None:
@@ -319,14 +319,22 @@ def main():
                     f.write(data)
             if ext == 'avsc' and args.mergeHeader and 'Topic' not in args.file:
                 try:
+                    file_name = args.file.split('.')[0]
+                    file_name = file_name.split('Body')[0]
+
                     config = ConfigObject(filename=CONFIG_FILE)
                     header_file = config['header']['path']
                     body = json.load(open(args.file, 'r'))
                     header = json.load(open(header_file, 'r'))
-                    topic_schema = {'header': header, 'body': body}
+                    topic_schema = {
+                        'name': file_name + 'Topic',
+                        'type': 'record',
+                        'fields': [
+                            {'name': 'header', 'type': header},
+                            {'name': 'body', 'type': body}
+                        ]
+                    }
                     topic_str = beautify_avro(json.dumps(topic_schema, indent=4))
-                    file_name = args.file.split('.')[0]
-                    file_name = file_name.split('Body')[0]
                     file_name += 'Topic.avsc'
                     with open(file_name, 'w') as fd:
                         fd.write(topic_str)
@@ -337,8 +345,6 @@ def main():
                 except KeyError:
                     print('Config key error')
                     sys.exit(-1)
-
-
 
         else:
             if not args.outputFile:
