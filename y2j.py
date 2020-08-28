@@ -379,6 +379,7 @@ def main():
                     o = join(args.directory, f.split('.')[0] + '.avsc')
                 else:
                     o = join(args.directory, f.split('.')[0] + '.json')
+                print(f'Converting file {f}')
                 convert(join(args.directory, f), o, False)
         sys.exit(0)
 
