@@ -368,7 +368,8 @@ def main():
                 ext = f.split('.')[1]
             else:
                 ext = ''
-            if args.json or ext == 'json' or ext == 'avsc':
+            if args.json:
+                if ext == 'json' or ext == 'avsc':
                     o = join(args.directory, f.split('.')[0] + '.yaml')
                     print(f'Converting file {f}')
                     convert(join(args.directory, f), o, True)
