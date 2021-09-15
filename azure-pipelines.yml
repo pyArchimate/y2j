@@ -35,7 +35,7 @@ steps:
 - task: CopyFiles@2
   inputs:
     Contents: '**/dist/y2j.exe'
-    TargetFolder: 
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
     OverWrite: true
     flattenFolders: true
 - task: UniversalPackages@0
