@@ -32,11 +32,12 @@ steps:
 #    pytest
 #  displayName: 'pytest'
 
-- task: PublishBuildArtifacts@1
+- task: CopyFiles@2
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'y2j'
-    publishLocation: 'Container'
+    Contents: '**/dist/y2j.exe'
+    TargetFolder: 
+    OverWrite: true
+    flattenFolders: true
 - task: UniversalPackages@0
   inputs:
     command: 'publish'
@@ -44,6 +45,6 @@ steps:
     feedsToUsePublish: 'internal'
     vstsFeedPublish: '736363f3-51a8-4b21-b5c2-030afce052c7/b9a57aa4-22c1-4c38-addd-6396cc25e42d'
     vstsFeedPackagePublish: 'y2j'
-    versionOption: 'major'
+    versionOption: 'patch'
     packagePublishDescription: 'A package to convert yaml to json and vice-versa'
     verbosity: 'Debug'
