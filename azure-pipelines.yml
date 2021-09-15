@@ -31,3 +31,11 @@ steps:
 #    pip install pytest pytest-azurepipelines
 #    pytest
 #  displayName: 'pytest'
+
+- task: UniversalPackages@0
+  inputs:
+    command: publish
+    publishDirectory: Application
+    vstsFeedPublish: '00000000-0000-0000-0000-000000000000/00000000-0000-0000-0000-000000000002'
+    vstsFeedPackagePublish: y2j
+    packagePublishDescription: 'A package to convert yaml to json and vice-versa'
