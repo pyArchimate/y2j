@@ -34,8 +34,10 @@ steps:
 
 - task: UniversalPackages@0
   inputs:
-    command: publish
-    publishDirectory: Application
-    vstsFeedPublish: '00000000-0000-0000-0000-000000000000/00000000-0000-0000-0000-000000000002'
-    vstsFeedPackagePublish: y2j
-    packagePublishDescription: 'A package to convert yaml to json and vice-versa'
+    command: 'publish'
+    publishDirectory: '$(Build.ArtifactStagingDirectory)'
+    feedsToUsePublish: 'internal'
+    vstsFeedPublish: '736363f3-51a8-4b21-b5c2-030afce052c7/b9a57aa4-22c1-4c38-addd-6396cc25e42d'
+    vstsFeedPackagePublish: 'Y2J'
+    versionOption: 'patch'
+    packagePublishDescription: 'A package to convert yaml to json and vice-versa''
