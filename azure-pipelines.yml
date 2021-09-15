@@ -32,6 +32,11 @@ steps:
 #    pytest
 #  displayName: 'pytest'
 
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'y2j'
+    publishLocation: 'Container'
 - task: UniversalPackages@0
   inputs:
     command: 'publish'
